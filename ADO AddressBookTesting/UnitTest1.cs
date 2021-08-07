@@ -48,5 +48,22 @@ namespace ADO_AddressBookTesting
             var expected = new List<int>(temp);
             CollectionAssert.AreEqual(actual, expected);
         }
+        [TestMethod]
+        public void InsertdataUsingTransactionAndReturnCount()
+        {
+            data.addressBookId = 1;
+            data.firstname = "Traine 1";
+            data.lastName = "ASP";
+            data.address = "Company address";
+            data.city = "Ramapuram";
+            data.state = "TS";
+            data.Zipcode = 54434;
+            data.phone = 987654321;
+            data.emailId = "traine@gamil.com";
+            data.personTypeId = 1;
+            string expected = "Updated";
+            string actual = repo.InsertPersonThroughTransaction(data);
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

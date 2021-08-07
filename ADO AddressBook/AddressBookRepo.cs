@@ -153,6 +153,48 @@ namespace ADO_AddressBook
                 sqlConnection.Close();
             }
         }
+        public string InsertPersonThroughTransaction(AddressBookData data)
+        {
+            try
+            {
+                DateTime date = Convert.ToDateTime("2020-10-30");
+                SqlCommand command = new SqlCommand("InsertDataInERTable", sqlConnection);
+                command.CommandType = CommandType.StoredProcedure;
+                //@addressBookId,@firstName,@lastName,@address,@city,@state,@zipCode,@phoneNumber,@emailId,@date
+                command.Parameters.AddWithValue("@addressBookId", data.addressBookId);
+                command.Parameters.AddWithValue("@firstName", data.firstname);
+                command.Parameters.AddWithValue("@lastName", data.lastName);
+                command.Parameters.AddWithValue("@address", data.address);
+                command.Parameters.AddWithValue("@city", data.city);
+                command.Parameters.AddWithValue("@state", data.state);
+                command.Parameters.AddWithValue("@zipCode", data.Zipcode);
+                command.Parameters.AddWithValue("@phoneNumber", data.phone);
+                command.Parameters.AddWithValue("@emailId", data.emailId);
+                command.Parameters.AddWithValue("@date", date);
+                command.Parameters.AddWithValue("@personTypeId", data.personTypeId);
+                sqlConnection.Open();
+                int result = command.ExecuteNonQuery();
+                if (result != 0)
+                {
+                    Console.WriteLine("Updated");
+                    return "Updated";
+                }
+                else
+                {
+                    Console.WriteLine("Not Update");
+                    return "Not Updated";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return "Not Updated";
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
         public static void DisplayTotalData (SqlDataReader reader,AddressBookData addressBook)
         {
             addressBook.personId = Convert.ToInt32(reader["PersonID"] == DBNull.Value ? default : reader["PersonID"]);

@@ -21,5 +21,9 @@ namespace ADO_AddressBook
         //used in update method
         public string firstname { get; set; }
         public string lastName { get; set; }
+        //For transaction 
+        public string city { get; set; }
+        public string state { get; set; }
+        public int Zipcode { get; set; }
     }
 }
