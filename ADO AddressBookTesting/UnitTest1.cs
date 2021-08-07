@@ -1,6 +1,7 @@
 ﻿using ADO_AddressBook;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 
 namespace ADO_AddressBookTesting
 {
@@ -38,6 +39,14 @@ namespace ADO_AddressBookTesting
             int expected = 2;
             int actual = repo.RetriveBaseONPerticularPeriod();
             Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void GetingNumberOfContactBaseONSate()
+        {
+            List<int> actual = repo.GetingTheCountOfContactsUsingState();
+            int[] temp = { 1, 2 };
+            var expected = new List<int>(temp);
+            CollectionAssert.AreEqual(actual, expected);
         }
     }
 }

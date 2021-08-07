@@ -118,6 +118,41 @@ namespace ADO_AddressBook
             }
             return count;
         }
+        public List<int> GetingTheCountOfContactsUsingState()
+        {
+            try
+            {
+                List<int> number = new List<int>();
+                string query = @"select count(*)as PersonCount,State from Person inner join AddressBook on Person.AddressBookID= AddressBook.AddressBookID group by State;";
+                SqlCommand command = new SqlCommand(query, sqlConnection);
+                sqlConnection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                if(reader.HasRows)
+                {
+                    while(reader.Read())
+                    {
+                        int PersonCount = Convert.ToInt32(reader["PersonCount"]);
+                        string State = Convert.ToString(reader["State"]);
+                        Console.WriteLine($"PersonCount:{PersonCount}|State:{State}");
+                        number.Add(PersonCount);
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+                return number;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return default;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
         public static void DisplayTotalData (SqlDataReader reader,AddressBookData addressBook)
         {
             addressBook.personId = Convert.ToInt32(reader["PersonID"] == DBNull.Value ? default : reader["PersonID"]);
