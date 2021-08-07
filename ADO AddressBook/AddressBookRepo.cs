@@ -50,6 +50,38 @@ namespace ADO_AddressBook
             }
             return count;
         }
+        public string UpdateContactPhoneNumber(AddressBookData data)
+        {
+            try
+            {
+                SqlCommand command = new SqlCommand("UpdatePhoneNumber", sqlConnection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@firstName", data.firstname);
+                command.Parameters.AddWithValue("@lastName", data.lastName);
+                command.Parameters.AddWithValue("@phoneNumber", data.phone);
+                sqlConnection.Open();
+                int result = command.ExecuteNonQuery();
+                if (result != 0)
+                {
+                    Console.WriteLine("Updated");
+                    return "Updated";
+                }
+                else
+                {
+                    Console.WriteLine("Not Update");
+                    return "Not Updated";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return "Not Updated";
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
         public static void DisplayTotalData (SqlDataReader reader,AddressBookData addressBook)
         {
             addressBook.personId = Convert.ToInt32(reader["PersonID"] == DBNull.Value ? default : reader["PersonID"]);

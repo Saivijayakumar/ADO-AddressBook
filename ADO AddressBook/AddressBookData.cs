@@ -18,5 +18,8 @@ namespace ADO_AddressBook
         public string personType { get; set; }
         public int addressBookId { get; set; }
         public string addressBookName { get; set; }
+        //used in update method
+        public string firstname { get; set; }
+        public string lastName { get; set; }
     }
 }
