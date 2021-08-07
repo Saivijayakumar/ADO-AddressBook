@@ -32,5 +32,12 @@ namespace ADO_AddressBookTesting
             string actual = repo.UpdateContactPhoneNumber(data);
             Assert.AreEqual(expected, actual);
         }
+        [TestMethod]
+        public void RetrivePersonsAtParticularPeriodAndReturnCount()
+        {
+            int expected = 2;
+            int actual = repo.RetriveBaseONPerticularPeriod();
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

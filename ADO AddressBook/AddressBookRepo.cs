@@ -82,6 +82,42 @@ namespace ADO_AddressBook
                 sqlConnection.Close();
             }
         }
+        public int RetriveBaseONPerticularPeriod()
+        {
+            int count = 0;
+            try
+            {
+                //create object for AddressBookData
+                AddressBookData addressBook = new AddressBookData();
+                SqlCommand command = new SqlCommand("RetriveByDateRange", sqlConnection);
+                command.CommandType = CommandType.StoredProcedure;
+                sqlConnection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        //calling method to display values
+                        DisplayTotalData(reader, addressBook);
+                        count++;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Data Not Found");
+                }
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+            return count;
+        }
         public static void DisplayTotalData (SqlDataReader reader,AddressBookData addressBook)
         {
             addressBook.personId = Convert.ToInt32(reader["PersonID"] == DBNull.Value ? default : reader["PersonID"]);
