@@ -68,10 +68,37 @@ namespace ADO_AddressBookTesting
             Assert.AreEqual(expected, actual);
         }
         [TestMethod]
-        public void CallingAMethodToDisplayAndTransverToListWeGetCountHere()
+        public void CallingAMethodToAddMultipleContactTolistandReturnValue()
         {
-            int expected = 7;
-            int actual = threads.TransverDataToListUsingThreads();
+            int expected = 1;
+            List<AddressBookData> bookList = new List<AddressBookData>();
+            AddressBookData data = new AddressBookData();
+            AddressBookData data1 = new AddressBookData();
+            //First Person
+            data.addressBookId = 1;
+            data.firstname = "ragu";
+            data.lastName = "H";
+            data.address = "Gandi street";
+            data.city = "Nellore";
+            data.state = "Ap";
+            data.Zipcode = 39949;
+            data.phone = 99899989;
+            data.emailId = "Ragu@gmail.com";
+            data.personTypeId = 1;
+            bookList.Add(data);
+            //Second Person
+            data1.addressBookId = 2;
+            data1.firstname = "ragu";
+            data1.lastName = "K";
+            data1.address = "Gandi street";
+            data1.city = "Naidi";
+            data1.state = "TS";
+            data1.Zipcode = 39949;
+            data1.phone = 99899989;
+            data1.emailId = "Ragu23@gmail.com";
+            data1.personTypeId = 2;
+            bookList.Add(data1);
+            int actual = threads.ForCalculatingTime(bookList);
             Assert.AreEqual(expected, actual);
         }
     }

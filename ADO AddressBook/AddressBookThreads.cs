@@ -16,36 +16,34 @@ namespace ADO_AddressBook
         public static string connectionString = @"Server=(localdb)\MSSQLLocalDB;Initial Catalog = Address_Book_service_DB;";
         //Createing conection object to connect with database
         SqlConnection sqlConnection = new SqlConnection(connectionString);
-        List<AddressBookData> bookList = new List<AddressBookData>();
-        public int TransverDataToListUsingThreads()
+        public void InsertMultiplePerson(AddressBookData data)
         {
-            int count = 0;
             try
             {
-                //create object for AddressBookData
-                AddressBookData addressBook = new AddressBookData();
-                Stopwatch stopWatch = new Stopwatch();
-                SqlCommand command = new SqlCommand("RetriveAllData", sqlConnection);
+                DateTime date = Convert.ToDateTime("2020-10-30");
+                SqlCommand command = new SqlCommand("InsertDataInERTable", sqlConnection);
                 command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@addressBookId", data.addressBookId);
+                command.Parameters.AddWithValue("@firstName", data.firstname);
+                command.Parameters.AddWithValue("@lastName", data.lastName);
+                command.Parameters.AddWithValue("@address", data.address);
+                command.Parameters.AddWithValue("@city", data.city);
+                command.Parameters.AddWithValue("@state", data.state);
+                command.Parameters.AddWithValue("@zipCode", data.Zipcode);
+                command.Parameters.AddWithValue("@phoneNumber", data.phone);
+                command.Parameters.AddWithValue("@emailId", data.emailId);
+                command.Parameters.AddWithValue("@date", date);
+                command.Parameters.AddWithValue("@personTypeId", data.personTypeId);
                 sqlConnection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows)
+                int result = command.ExecuteNonQuery();
+                if (result != 0)
                 {
-                    while (reader.Read())
-                    {
-                        stopWatch.Start();
-                        //calling method to display and add to list
-                        DisplayAndAddToList(reader, addressBook);
-                        count++;
-                    }
-                    stopWatch.Stop();
-                    Console.WriteLine("Time elapsed using Thread: {0}", stopWatch.ElapsedMilliseconds);
+                    Console.WriteLine("Updated");
                 }
                 else
                 {
-                    Console.WriteLine("Data Not Found");
+                    Console.WriteLine("Not Update");
                 }
-                reader.Close();
             }
             catch (Exception ex)
             {
@@ -55,28 +53,37 @@ namespace ADO_AddressBook
             {
                 sqlConnection.Close();
             }
-            return count;
         }
-        public void DisplayAndAddToList(SqlDataReader reader, AddressBookData addressBook)
+        public int ForCalculatingTime(List<AddressBookData> book)
         {
-            addressBook.personId = Convert.ToInt32(reader["PersonID"] == DBNull.Value ? default : reader["PersonID"]);
-            addressBook.name = Convert.ToString(reader["Name"] == DBNull.Value ? default : reader["Name"]);
-            addressBook.address = Convert.ToString(reader["Address"] == DBNull.Value ? default : reader["Address"]);
-            addressBook.phone = Convert.ToInt64(reader["PhoneNumber"] == DBNull.Value ? default : reader["PhoneNumber"]);
-            addressBook.emailId = Convert.ToString(reader["EmailID"] == DBNull.Value ? default : reader["EmailID"]);
-            addressBook.date = Convert.ToDateTime(reader["AddDate"] == DBNull.Value ? default : reader["AddDate"]);
-            addressBook.personTypeId = Convert.ToInt32(reader["PersonTypeID"] == DBNull.Value ? default : reader["PersonTypeID"]);
-            addressBook.personType = Convert.ToString(reader["PersonType"] == DBNull.Value ? default : reader["PersonType"]);
-            addressBook.addressBookId = Convert.ToInt32(reader["AddressBookID"] == DBNull.Value ? default : reader["AddressBookID"]);
-            addressBook.addressBookName = Convert.ToString(reader["AddressBookName"] == DBNull.Value ? default : reader["AddressBookName"]);
-            Thread thread = new Thread(() =>
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            AddContactListToDBWithThread(book);
+            stopwatch.Stop();
+            Console.WriteLine($"Time taken for With Thread :{stopwatch.ElapsedMilliseconds}");
+            if(stopwatch.ElapsedMilliseconds != 0)
             {
-                Console.WriteLine($"PersonId:{addressBook.personId}|Name:{addressBook.name}|Address:{addressBook.address}|PhoneNumber:{addressBook.phone}|" +
-                $"EmailID:{addressBook.emailId}|Date:{addressBook.date}|PersonTypeId:{addressBook.personTypeId}|PersonType:{addressBook.personType}|" +
-                $"AddressBookID:{addressBook.addressBookId}|AddressBookName:{addressBook.addressBookName}\n");
-                bookList.Add(addressBook);
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        // Method to Add List of Contacts To DB With Thread......................
+        public void AddContactListToDBWithThread(List<AddressBookData> bookList)
+        {
+            bookList.ForEach(book =>
+            {
+                Thread thread = new Thread(() =>
+                {
+                    Console.WriteLine("Contact adding start: " + book.firstname);
+                    this.InsertMultiplePerson(book);
+                    Console.WriteLine("Contact adding end: " + book.firstname);
+                });
+                thread.Start();
+                thread.Join();
             });
-            thread.Start();
         }
     }
 }
