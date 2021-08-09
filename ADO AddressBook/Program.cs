@@ -11,6 +11,7 @@ namespace ADO_AddressBook
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to Address Book Ado.Net");
+            Console.ReadLine();
         }
     }
 }

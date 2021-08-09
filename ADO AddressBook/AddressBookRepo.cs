@@ -160,7 +160,6 @@ namespace ADO_AddressBook
                 DateTime date = Convert.ToDateTime("2020-10-30");
                 SqlCommand command = new SqlCommand("InsertDataInERTable", sqlConnection);
                 command.CommandType = CommandType.StoredProcedure;
-                //@addressBookId,@firstName,@lastName,@address,@city,@state,@zipCode,@phoneNumber,@emailId,@date
                 command.Parameters.AddWithValue("@addressBookId", data.addressBookId);
                 command.Parameters.AddWithValue("@firstName", data.firstname);
                 command.Parameters.AddWithValue("@lastName", data.lastName);

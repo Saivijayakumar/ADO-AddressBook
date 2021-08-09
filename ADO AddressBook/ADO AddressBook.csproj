@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AddressBookData.cs" />
     <Compile Include="AddressBookRepo.cs" />
+    <Compile Include="AddressBookThreads.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

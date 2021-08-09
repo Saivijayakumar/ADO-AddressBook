@@ -10,16 +10,18 @@ namespace ADO_AddressBookTesting
     {
         AddressBookRepo repo;
         AddressBookData data;
+        AddressBookThreads threads;
         [TestInitialize]
         public void setup()
         {
             repo = new AddressBookRepo();
             data = new AddressBookData();
+            threads = new AddressBookThreads();
         }
         [TestMethod]
         public void DisplayingAndReturnCount()
         {
-            int expected = 4;
+            int expected = 7;
             int actual = repo.RetriveAllData();
             Assert.AreEqual(expected, actual);
         }
@@ -63,6 +65,13 @@ namespace ADO_AddressBookTesting
             data.personTypeId = 1;
             string expected = "Updated";
             string actual = repo.InsertPersonThroughTransaction(data);
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void CallingAMethodToDisplayAndTransverToListWeGetCountHere()
+        {
+            int expected = 7;
+            int actual = threads.TransverDataToListUsingThreads();
             Assert.AreEqual(expected, actual);
         }
     }
